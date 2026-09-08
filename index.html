@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copa Vicente Rijo - Campeonato de Voleibol</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --primary: #0d1b3e;
+            --primary-light: #1a3a7a;
+            --primary-dark: #060e22;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --accent-dark: #2563eb;
+            --gold: #f5a623;
+            --gold-light: #ffc04d;
+            --red: #ef4444;
+            --green: #22c55e;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #0f172a;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 24px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.1);
+            --radius: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; overflow-x: hidden; }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: var(--primary); backdrop-filter: blur(20px);
+            padding: 0 2rem; height: 64px;
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 3px solid var(--accent);
+        }
+
+        .nav-brand {
+            display: flex; align-items: center; gap: 12px;
+            color: white; text-decoration: none; font-weight: 800; font-size: 1.15rem;
+        }
+
+        .nav-brand .volleyball-icon {
+            width: 38px; height: 38px; background: var(--accent);
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem; box-shadow: 0 0 12px rgba(59,130,246,0.4);
+        }
+
+        .nav-links { display: flex; list-style: none; gap: 4px; }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.7); text-decoration: none;
+            padding: 8px 14px; border-radius: var(--radius-sm);
+            font-weight: 600; font-size: 0.85rem; transition: var(--transition);
+        }
+
+        .nav-links a:hover, .nav-links a.active { background: rgba(59,130,246,0.2); color: white; }
+
+        .hamburger {
+            display: none; flex-direction: column; cursor: pointer;
+            gap: 5px; background: none; border: none; padding: 8px;
+        }
+        .hamburger span { width: 24px; height: 2px; background: white; border-radius: 2px; transition: var(--transition); }
+
+        /* HERO */
+        .hero {
+            margin-top: 64px;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 40%, var(--primary-light) 100%);
+            padding: 4.5rem 2rem 4rem; text-align: center; color: white; position: relative; overflow: hidden;
+        }
+
+        .hero::before {
+            content: ''; position: absolute; top: -50%; right: -20%; width: 500px; height: 500px;
+            background: radial-gradient(circle, rgba(59,130,246,0.15) 0%, transparent 70%);
+            animation: pulse 6s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: ''; position: absolute; bottom: -30%; left: -10%; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(245,166,35,0.08) 0%, transparent 70%);
+            animation: pulse 8s ease-in-out infinite reverse;
+        }
+
+        @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.08)} }
+
+        .hero-content { position: relative; z-index: 1; max-width: 800px; margin: 0 auto; }
+
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.3);
+            padding: 6px 18px; border-radius: 50px;
+            font-weight: 600; font-size: 0.8rem; color: var(--accent-light); margin-bottom: 1.5rem;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+
+        .hero-badge .dot { width: 8px; height: 8px; background: var(--gold); border-radius: 50%; animation: blink 1.5s ease-in-out infinite; }
+        @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+        .hero h1 { font-size: 2.8rem; font-weight: 900; margin-bottom: 0.25rem; letter-spacing: -1px; }
+        .hero h1 span { color: var(--accent-light); }
+
+        .hero .subtitle { font-size: 1.1rem; opacity: 0.7; font-weight: 400; margin-bottom: 2.5rem; }
+
+        .hero-stats { display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap; }
+
+        .hero-stat {
+            text-align: center; background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: var(--radius);
+            padding: 1rem 1.5rem; min-width: 110px; backdrop-filter: blur(8px);
+        }
+
+        .hero-stat .number { font-size: 2rem; font-weight: 900; color: var(--gold); line-height: 1; }
+        .hero-stat .label { font-size: 0.7rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 1px; margin-top: 4px; }
+
+        /* SECTIONS */
+        .section { max-width: 1200px; margin: 0 auto; padding: 3rem 2rem; }
+
+        .section-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+        }
+
+        .section-title { font-size: 1.5rem; font-weight: 800; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        .section-title .icon { font-size: 1.3rem; }
+
+        .tab-btn {
+            padding: 8px 18px; border: none; background: var(--card);
+            border-radius: var(--radius-sm); font-weight: 600; font-size: 0.85rem;
+            color: var(--text-light); cursor: pointer; transition: var(--transition);
+            white-space: nowrap; font-family: inherit; border: 1px solid var(--border);
+        }
+
+        .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 2px 8px rgba(59,130,246,0.3); }
+        .tab-btn:hover:not(.active) { background: #e2e8f0; }
+
+        .filter-bar { display: flex; gap: 6px; flex-wrap: wrap; }
+        .header-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+        /* GAME CARDS */
+        .games-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.25rem; }
+
+        .game-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; transition: var(--transition); border: 1px solid var(--border); }
+        .game-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+
+        .game-card-header { padding: 10px 18px; display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        .game-card-header.scheduled { background: var(--primary); color: white; }
+        .game-card-header.live { background: var(--red); color: white; }
+        .game-card-header.finished { background: #475569; color: white; }
+
+        .live-badge { display: flex; align-items: center; gap: 6px; font-weight: 700; }
+        .live-dot { width: 8px; height: 8px; background: white; border-radius: 50%; animation: blink 1s ease-in-out infinite; }
+
+        .game-card-body { padding: 18px; }
+        .game-teams { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+        .game-team { flex: 1; text-align: center; }
+
+        .team-logo {
+            width: 56px; height: 56px; border-radius: 50%; margin: 0 auto 6px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.3rem; font-weight: 900; color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+
+        .team-name { font-weight: 700; font-size: 0.85rem; }
+        .team-class { font-size: 0.7rem; color: var(--text-light); }
+
+        .game-score { font-size: 1.6rem; font-weight: 900; color: var(--primary); min-width: 70px; text-align: center; }
+        .game-score .separator { margin: 0 2px; color: var(--text-light); }
+
+        .game-card-actions { padding: 0 18px 14px; display: flex; gap: 8px; justify-content: center; }
+
+        .btn-score {
+            background: var(--accent); color: white; border: none;
+            padding: 7px 18px; border-radius: var(--radius-sm); font-family: inherit;
+            font-weight: 600; font-size: 0.8rem; cursor: pointer; transition: var(--transition);
+        }
+        .btn-score:hover { background: var(--accent-dark); }
+        .btn-score.gold { background: var(--gold); color: var(--primary-dark); }
+        .btn-score.gold:hover { background: #e09520; }
+        .btn-score.red { background: #fee2e2; color: var(--red); }
+        .btn-score.red:hover { background: #fecaca; }
+
+        .game-card-footer { padding: 10px 18px; background: var(--bg); display: flex; align-items: center; justify-content: space-between; font-size: 0.75rem; color: var(--text-light); border-top: 1px solid var(--border); }
+
+        /* STANDINGS */
+        .group-header {
+            background: var(--primary); color: white; padding: 10px 18px;
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+            font-weight: 700; font-size: 0.9rem; display: flex; align-items: center; gap: 8px;
+        }
+        .group-header:first-child { margin-top: 0; }
+        .group-header .grp-icon { background: var(--accent); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.7rem; font-weight: 900; }
+
+        .standings-wrapper { background: var(--card); border-radius: 0 0 var(--radius) var(--radius); box-shadow: var(--shadow); overflow: hidden; border: 1px solid var(--border); border-top: none; margin-bottom: 1.5rem; }
+        .standings-table { width: 100%; border-collapse: collapse; }
+        .standings-table thead { background: #f8fafc; }
+
+        .standings-table th { padding: 12px 14px; text-align: left; font-weight: 700; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); border-bottom: 2px solid var(--border); }
+        .standings-table th:not(:first-child):not(:nth-child(2)) { text-align: center; }
+
+        .standings-table td { padding: 12px 14px; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+        .standings-table td:not(:first-child):not(:nth-child(2)) { text-align: center; }
+        .standings-table tbody tr { transition: var(--transition); }
+        .standings-table tbody tr:hover { background: #f8fafc; }
+        .standings-table .position { font-weight: 800; width: 36px; }
+        .standings-table .position.gold { color: var(--gold); }
+        .standings-table .position.silver { color: #94a3b8; }
+        .standings-table .position.bronze { color: #b45309; }
+
+        .standings-table .team-cell { display: flex; align-items: center; gap: 8px; }
+
+        .standings-table .team-cell .mini-logo {
+            width: 28px; height: 28px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-weight: 800; font-size: 0.65rem; flex-shrink: 0;
+        }
+
+        .standings-table .pts { font-weight: 800; color: var(--accent); font-size: 0.95rem; }
+        .form-indicator { display: inline-flex; gap: 3px; justify-content: center; }
+        .form-dot { width: 7px; height: 7px; border-radius: 50%; }
+        .form-dot.w { background: var(--green); }
+        .form-dot.l { background: var(--red); }
+
+        /* TEAMS */
+        .teams-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; margin-bottom: 1.5rem; }
+
+        .team-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.75rem; text-align: center; transition: var(--transition); border: 1px solid var(--border); cursor: pointer; }
+        .team-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+
+        .team-card .big-logo {
+            width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 0.75rem;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; font-weight: 900; color: white;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+        }
+
+        .team-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; }
+        .team-card .tags { display: flex; justify-content: center; gap: 6px; margin-bottom: 1rem; flex-wrap: wrap; }
+
+        .team-card .team-class-tag {
+            display: inline-block; background: var(--bg); padding: 3px 10px;
+            border-radius: 50px; font-size: 0.75rem; color: var(--text-light); font-weight: 600;
+        }
+
+        .team-card .group-badge {
+            display: inline-block; background: var(--accent); color: white; padding: 3px 10px;
+            border-radius: 50px; font-size: 0.7rem; font-weight: 700;
+        }
+
+        .team-card .team-stats { display: flex; justify-content: center; gap: 1.25rem; }
+        .team-card .team-stat { text-align: center; }
+        .team-card .team-stat .val { font-size: 1.1rem; font-weight: 800; color: var(--primary); }
+        .team-card .team-stat .lbl { font-size: 0.65rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+
+        /* PLAYERS */
+        .players-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; }
+
+        .player-card {
+            background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+            padding: 1rem 1.25rem; display: flex; align-items: center; gap: 0.75rem;
+            transition: var(--transition); border: 1px solid var(--border);
+        }
+        .player-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        .players-grid.compact { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; }
+
+        .player-card.compact {
+            padding: 0.6rem 0.75rem; gap: 0.6rem;
+            box-shadow: none; border-radius: var(--radius-sm);
+        }
+        .player-card.compact:hover { transform: none; box-shadow: var(--shadow); }
+
+        .player-card.compact .player-avatar {
+            width: 34px; height: 34px; font-size: 0.7rem;
+        }
+
+        .player-card.compact h4 { font-size: 0.8rem; }
+
+        .player-avatar {
+            width: 48px; height: 48px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1rem; font-weight: 900; color: white; flex-shrink: 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+
+        .player-info { flex: 1; }
+        .player-info h4 { font-weight: 700; font-size: 0.9rem; margin-bottom: 1px; }
+        .player-info .player-team { font-size: 0.75rem; color: var(--text-light); }
+        .player-info .player-pos { font-size: 0.7rem; color: var(--accent); font-weight: 600; }
+
+        .player-stats { text-align: right; }
+        .player-stats .stat-val { font-size: 1.25rem; font-weight: 900; color: var(--gold); }
+        .player-stats .stat-label { font-size: 0.6rem; color: var(--text-light); text-transform: uppercase; }
+
+        .btn-x { background: none; border: none; color: var(--text-light); cursor: pointer; font-size: 1.1rem; padding: 4px; border-radius: 50%; transition: var(--transition); }
+        .btn-x:hover { background: #fee2e2; color: var(--red); }
+
+        /* NEWS */
+        .news-list { display: flex; flex-direction: column; gap: 1rem; }
+
+        .news-item {
+            background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+            padding: 1.25rem; display: flex; gap: 1rem; transition: var(--transition); border: 1px solid var(--border);
+        }
+        .news-item:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+        .news-date-box {
+            background: var(--primary); color: white; border-radius: var(--radius-sm);
+            padding: 10px 14px; text-align: center; min-width: 64px; flex-shrink: 0;
+        }
+        .news-date-box .day { font-size: 1.4rem; font-weight: 900; line-height: 1; }
+        .news-date-box .month { font-size: 0.65rem; text-transform: uppercase; opacity: 0.7; letter-spacing: 1px; }
+
+        .news-content h3 { font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+        .news-content p { color: var(--text-light); font-size: 0.85rem; line-height: 1.5; }
+
+        .news-tag {
+            display: inline-block; background: rgba(59,130,246,0.1); color: var(--accent);
+            padding: 2px 10px; border-radius: 50px; font-size: 0.7rem; font-weight: 600; margin-top: 6px;
+        }
+
+        /* MODALS */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
+            z-index: 2000; display: none; align-items: center; justify-content: center; padding: 2rem;
+        }
+        .modal-overlay.active { display: flex; }
+
+        .modal {
+            background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow-lg);
+            width: 100%; max-width: 520px; max-height: 90vh; overflow-y: auto;
+            border: 1px solid var(--border);
+        }
+
+        .modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+        .modal-header h2 { font-size: 1.1rem; font-weight: 700; }
+
+        .modal-close {
+            width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg);
+            cursor: pointer; font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
+            transition: var(--transition); color: var(--text-light);
+        }
+        .modal-close:hover { background: #fee2e2; color: var(--red); }
+
+        .modal-body { padding: 1.5rem; }
+
+        .form-group { margin-bottom: 1rem; }
+        .form-group label { display: block; font-weight: 600; font-size: 0.8rem; margin-bottom: 5px; color: var(--text); }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 9px 12px; border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm); font-family: inherit; font-size: 0.85rem;
+            transition: var(--transition); background: white;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(59,130,246,0.1);
+        }
+
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+
+        .btn {
+            padding: 9px 20px; border: none; border-radius: var(--radius-sm);
+            font-family: inherit; font-weight: 600; font-size: 0.85rem; cursor: pointer;
+            transition: var(--transition); display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-primary { background: var(--accent); color: white; }
+        .btn-primary:hover { background: var(--accent-dark); }
+        .btn-secondary { background: var(--bg); color: var(--text); border: 1px solid var(--border); }
+        .btn-secondary:hover { background: var(--border); }
+        .btn-accent { background: var(--red); color: white; }
+        .btn-accent:hover { background: #dc2626; }
+        .btn-block { width: 100%; justify-content: center; }
+        .btn-sm { padding: 5px 12px; font-size: 0.75rem; }
+
+        .btn-add {
+            background: var(--accent); color: white; border: none;
+            padding: 9px 18px; border-radius: var(--radius-sm); font-family: inherit;
+            font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: var(--transition);
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-add:hover { background: var(--accent-dark); transform: translateY(-1px); }
+
+        .footer { background: var(--primary); color: rgba(255,255,255,0.6); text-align: center; padding: 1.5rem; margin-top: 2rem; border-top: 3px solid var(--accent); }
+        .footer strong { color: white; }
+
+        .toast {
+            position: fixed; bottom: 2rem; right: 2rem; background: var(--primary); color: white;
+            padding: 12px 22px; border-radius: var(--radius-sm); font-weight: 600; font-size: 0.85rem;
+            box-shadow: var(--shadow-lg); transform: translateY(120%); transition: var(--transition); z-index: 3000;
+            border-left: 4px solid var(--accent);
+        }
+        .toast.show { transform: translateY(0); }
+
+        .empty-state { text-align: center; padding: 3rem 2rem; color: var(--text-light); }
+        .empty-state .icon { font-size: 2.5rem; margin-bottom: 0.75rem; }
+        .empty-state h3 { font-weight: 600; margin-bottom: 0.25rem; font-size: 1rem; }
+        .empty-state p { font-size: 0.85rem; }
+
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        .fade-in { animation: fadeIn 0.4s ease-out; }
+        @keyframes fadeIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none; position: absolute; top: 64px; left: 0; right: 0;
+                background: var(--primary); flex-direction: column; padding: 0.75rem;
+                border-top: 1px solid rgba(255,255,255,0.1);
+            }
+            .nav-links.open { display: flex; }
+            .hamburger { display: flex; }
+            .hero h1 { font-size: 1.8rem; }
+            .hero .subtitle { font-size: 0.9rem; }
+            .hero-stats { gap: 0.75rem; }
+            .hero-stat { min-width: 80px; padding: 0.75rem 1rem; }
+            .hero-stat .number { font-size: 1.5rem; }
+            .games-grid { grid-template-columns: 1fr; }
+            .teams-grid { grid-template-columns: 1fr; }
+            .section-header { flex-direction: column; align-items: flex-start; }
+            .standings-table { font-size: 0.75rem; }
+            .standings-table th, .standings-table td { padding: 8px 6px; }
+            .news-item { flex-direction: column; }
+            .form-row { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 480px) {
+            .hero { padding: 3rem 1rem 2.5rem; }
+            .hero h1 { font-size: 1.5rem; }
+            .section { padding: 2rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <a href="#" class="nav-brand" onclick="scrollToSection('hero')">
+            <div class="volleyball-icon">🏐</div>
+            Copa Vicente Rijo
+        </a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" class="active" onclick="scrollToSection('hero')">Inicio</a></li>
+            <li><a href="#" onclick="scrollToSection('jogos')">Jogos</a></li>
+            <li><a href="#" onclick="scrollToSection('classificacao')">Classificacao</a></li>
+            <li><a href="#" onclick="scrollToSection('equipes')">Equipes</a></li>
+            <li><a href="#" onclick="scrollToSection('noticias')">Noticias</a></li>
+        </ul>
+        <div style="display:flex;align-items:center;gap:10px;">
+            <button class="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <section class="hero" id="hero">
+        <div class="hero-content fade-in">
+            <div class="hero-badge"><span class="dot"></span> Edicao 2026</div>
+            <h1>Copa <span>Vicente Rijo</span></h1>
+            <p class="subtitle">Campeonato Interno de Voleibol</p>
+            <div class="hero-stats">
+                <div class="hero-stat"><div class="number" id="statTeams">0</div><div class="label">Equipes</div></div>
+                <div class="hero-stat"><div class="number" id="statGroups">0</div><div class="label">Grupos</div></div>
+                <div class="hero-stat"><div class="number" id="statPlayers">0</div><div class="label">Jogadores</div></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- JOGOS -->
+    <section class="section" id="jogos">
+        <div class="section-header">
+            <h2 class="section-title"><span class="icon">🏐</span> Jogos</h2>
+            <div class="header-actions">
+                <div class="filter-bar">
+                    <button class="tab-btn active" onclick="filterGames('all', this)">Todos</button>
+                    <button class="tab-btn" onclick="filterGames('scheduled', this)">Proximos</button>
+                    <button class="tab-btn" onclick="filterGames('finished', this)">Finalizados</button>
+                </div>
+                <button class="btn-add" onclick="openModal('gameModal')">+ Novo Jogo</button>
+            </div>
+        </div>
+        <div class="games-grid" id="gamesContainer"></div>
+    </section>
+
+    <!-- CLASSIFICACAO -->
+    <section class="section" id="classificacao">
+        <div class="section-header">
+            <h2 class="section-title"><span class="icon">🏆</span> Classificacao por Grupos</h2>
+            <p style="font-size:0.8rem;color:var(--text-light)">Atualiza automaticamente</p>
+        </div>
+        <div id="standingsContainer"></div>
+    </section>
+
+    <!-- EQUIPES -->
+    <section class="section" id="equipes">
+        <div class="section-header">
+            <h2 class="section-title"><span class="icon">👥</span> Equipes</h2>
+            <button class="btn-add" onclick="openModal('teamModal')">+ Nova Equipe</button>
+        </div>
+        <div id="teamsContainer"></div>
+    </section>
+
+    <!-- NOTICIAS -->
+    <section class="section" id="noticias">
+        <div class="section-header">
+            <h2 class="section-title"><span class="icon">📰</span> Noticias</h2>
+            <button class="btn-add" onclick="openModal('newsModal')">+ Nova Noticia</button>
+        </div>
+        <div class="news-list" id="newsContainer"></div>
+    </section>
+
+    <footer class="footer">
+        <p><strong>Copa Vicente Rijo</strong> &mdash; Campeonato Interno de Voleibol</p>
+        <p style="margin-top:0.25rem;font-size:0.8rem;">Escola Vicente Rijo &copy; 2026</p>
+        <p style="margin-top:0.75rem;font-size:0.75rem;opacity:0.85;" id="cloudStatus"></p>
+        <p style="margin-top:0.75rem;"><button onclick="resetAllData()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:rgba(255,255,255,0.6);padding:5px 14px;border-radius:6px;font-size:0.7rem;cursor:pointer;font-family:inherit;">Resetar Dados</button></p>
+    </footer>
+
+    <!-- MODAL: JOGO -->
+    <div class="modal-overlay" id="gameModal">
+        <div class="modal">
+            <div class="modal-header"><h2>Novo Jogo</h2><button class="modal-close" onclick="closeModal('gameModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Fase</label>
+                    <select id="gameRound">
+                        <option value="1a fase">1a Fase (Grupos)</option>
+                        <option value="quartas">Quartas de Final</option>
+                        <option value="semifinal">Semifinal</option>
+                        <option value="final">Final</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Equipe 1</label><select id="gameTeam1"></select></div>
+                    <div class="form-group"><label>Equipe 2</label><select id="gameTeam2"></select></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Data</label><input type="date" id="gameDate"></div>
+                    <div class="form-group"><label>Horario</label><input type="time" id="gameTime"></div>
+                </div>
+                <div class="form-group"><label>Local</label><input type="text" id="gameLocation" placeholder="Quadra da escola"></div>
+                <button class="btn btn-primary btn-block" onclick="saveGame()">Salvar Jogo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: PLACAR -->
+    <div class="modal-overlay" id="scoreModal">
+        <div class="modal">
+            <div class="modal-header"><h2>Registrar Placar</h2><button class="modal-close" onclick="closeModal('scoreModal')">&times;</button></div>
+            <div class="modal-body">
+                <div id="scoreGameInfo" style="text-align:center;margin-bottom:1.5rem;"></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label id="scoreLabel1">Sets</label>
+                        <input type="number" id="scoreInput1" min="0" max="5" value="0">
+                    </div>
+                    <div class="form-group">
+                        <label id="scoreLabel2">Sets</label>
+                        <input type="number" id="scoreInput2" min="0" max="5" value="0">
+                    </div>
+                </div>
+                <p style="font-size:0.75rem;color:var(--text-light);text-align:center;margin-bottom:1.25rem;">
+                    Quantidade de sets ganhos por cada equipe.
+                </p>
+                <button class="btn btn-primary btn-block" onclick="saveScore()">Salvar Placar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: EQUIPE -->
+    <div class="modal-overlay" id="teamModal">
+        <div class="modal">
+            <div class="modal-header"><h2>Nova Equipe</h2><button class="modal-close" onclick="closeModal('teamModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Nome da Equipe</label><input type="text" id="teamName" placeholder="Ex: Leoes do 9A"></div>
+                <div class="form-group"><label>Turma / Classe</label><input type="text" id="teamClass" placeholder="Ex: 9o Ano A"></div>
+                <div class="form-group">
+                    <label>Grupo</label>
+                    <select id="teamGroup">
+                        <option value="A">Grupo A</option>
+                        <option value="B">Grupo B</option>
+                        <option value="C">Grupo C</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <div class="form-group"><label>Cor</label><input type="color" id="teamColor" value="#3b82f6"></div>
+                    <div class="form-group">
+                        <label>Cor da Letra</label>
+                        <select id="teamTextColor">
+                            <option value="white">Branco</option>
+                            <option value="black">Preto</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="saveTeam()">Salvar Equipe</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: JOGADOR -->
+    <div class="modal-overlay" id="playerModal">
+        <div class="modal">
+            <div class="modal-header"><h2>Novo Jogador</h2><button class="modal-close" onclick="closeModal('playerModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Nome do Jogador</label><input type="text" id="playerName" placeholder="Digite o nome completo"></div>
+                <div class="form-group"><label>Equipe</label><select id="playerTeam"></select></div>
+                <button class="btn btn-primary btn-block" onclick="savePlayer()">Salvar Jogador</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: NOTICIA -->
+    <div class="modal-overlay" id="newsModal">
+        <div class="modal">
+            <div class="modal-header"><h2>Nova Noticia</h2><button class="modal-close" onclick="closeModal('newsModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group"><label>Titulo</label><input type="text" id="newsTitle" placeholder="Titulo da noticia"></div>
+                <div class="form-group"><label>Conteudo</label><textarea id="newsBody" rows="4" placeholder="Escreva a noticia..."></textarea></div>
+                <div class="form-row">
+                    <div class="form-group"><label>Data</label><input type="date" id="newsDate"></div>
+                    <div class="form-group">
+                        <label>Categoria</label>
+                        <select id="newsCategory">
+                            <option value="Resultado">Resultado</option>
+                            <option value="Agendamento">Agendamento</option>
+                            <option value="Noticia">Noticia</option>
+                            <option value="Destaque">Destaque</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn btn-primary btn-block" onclick="saveNews()">Publicar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: JOGADORES DO TIME -->
+    <div class="modal-overlay" id="teamPlayersModal">
+        <div class="modal" style="max-width:680px;">
+            <div class="modal-header">
+                <h2 id="teamPlayersTitle">Jogadores</h2>
+                <button class="modal-close" onclick="closeModal('teamPlayersModal')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div id="teamPlayersList"></div>
+                <div class="form-group" style="margin-top:1rem;">
+                    <label>Capitão do Time</label>
+                    <select id="teamCaptain" onchange="setCaptain(this.value)">
+                        <option value="">Sem capitão</option>
+                    </select>
+                </div>
+                <button class="btn btn-primary btn-block" id="btnAddPlayerToTeam" onclick="addPlayerToTeam()">+ Novo Jogador</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: LOGIN ADMIN -->
+    <div class="modal-overlay" id="loginModal">
+        <div class="modal" style="max-width:400px;">
+            <div class="modal-header"><h2>🔒 Acesso Admin</h2><button class="modal-close" onclick="closeModal('loginModal')">&times;</button></div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Senha</label>
+                    <input type="password" id="loginPassword" placeholder="Digite a senha do admin" onkeydown="if(event.key==='Enter')doLogin()">
+                </div>
+                <p id="loginError" style="color:var(--red);font-size:0.8rem;text-align:center;display:none;margin-bottom:1rem;">Senha incorreta!</p>
+                <button class="btn btn-primary btn-block" onclick="doLogin()">Entrar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        // ===================== SUPABASE CONFIG =====================
+        // 1) Crie um projeto gratuito em https://supabase.com
+        // 2) Em Settings > API, copie o "Project URL" e a "anon public key"
+        // 3) Cole abaixo dentro das aspas
+        // 4) Rode o SQL em supabase/migrations/0001_init.sql
+        // 5) Rode as Edge Functions (ver README) e defina as variaveis de ambiente
+        const SUPABASE_URL_INPUT = 'https://ptotubqfypfwklyufawk.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0b3R1YnFmeXBmd2tseXVmYXdrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODg4ODU4NTIsImV4cCI6MjEwNDQ2MTg1Mn0.kgzVtg4dRAyR1V3pJKSsXSluaQ3gTQcZNoOJZWkquqg';
+
+        // Corrige erros comuns de copiar e colar (ex: URL com /rest/v1/ no final).
+        function normalizeProjectUrl(u) {
+            if (!u) return '';
+            u = String(u).trim().replace(/\/+$/, '');
+            u = u.replace(/\/rest\/v1$/, '');
+            u = u.replace(/\/functions\/v1$/, '');
+            return u;
+        }
+
+        // URL publica das Edge Functions (ex: https://SEU-REF.supabase.co/functions/v1)
+        const SUPABASE_URL = normalizeProjectUrl(SUPABASE_URL_INPUT);
+        const SUPABASE_FUNCTIONS_URL = SUPABASE_URL ? SUPABASE_URL + '/functions/v1' : '';
+
+        let supabase = null;          // cliente do Supabase (nuvem)
+        let supabaseSdkMissing = false; // true se o CDN da biblioteca nao carregou
+        if (SUPABASE_URL) {
+            try {
+                if (window.supabase) {
+                    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+                } else {
+                    supabaseSdkMissing = true;
+                }
+            } catch (e) {
+                console.error('Falha ao criar o cliente do Supabase.', e);
+            }
+        }
+
+        // ===================== DATA =====================
+        const DATA_VERSION = 3;
+        const STORAGE_KEY = 'copaVicenteRijo';
+
+        function getEmptyData() { return { version: DATA_VERSION, teams: [], games: [], players: [], news: [], nextId: 1 }; }
+
+        function seedInauguralNews(d) {
+            const exists = d.news.some(n => n.id === 0);
+            if (!exists) {
+                d.news.unshift({
+                    id: 0,
+                    title: 'Comeca hoje a Copa Vicente Rijo de Volei!',
+                    body: 'Hoje comeca a Copa Vicente de Voleibol na quadra coberta da escola. O primeiro jogo sera as 10h. Venha torcer! Onde: quadra coberta da escola.',
+                    date: new Date().toISOString().split('T')[0],
+                    category: 'Destaque'
+                });
+            }
+            return d;
+        }
+
+        function normalize(dataObj) {
+            if (!dataObj || typeof dataObj !== 'object') return seedInauguralNews(getEmptyData());
+            const d = {
+                version: DATA_VERSION,
+                teams: Array.isArray(dataObj.teams) ? dataObj.teams : [],
+                games: Array.isArray(dataObj.games) ? dataObj.games : [],
+                players: Array.isArray(dataObj.players) ? dataObj.players : [],
+                news: Array.isArray(dataObj.news) ? dataObj.news : [],
+                nextId: typeof dataObj.nextId === 'number' && dataObj.nextId >= 1 ? dataObj.nextId : 1
+            };
+            if (typeof d.nextId !== 'number' || d.nextId < 1) {
+                const ids = [];
+                d.teams.forEach(t => ids.push(t.id));
+                d.games.forEach(g => ids.push(g.id));
+                d.players.forEach(p => ids.push(p.id));
+                d.news.forEach(n => ids.push(n.id));
+                d.nextId = (ids.length ? Math.max.apply(null, ids) : 0) + 1;
+            }
+            return seedInauguralNews(d);
+        }
+
+        // Carrega os dados: primeiro da nuvem (Supabase), com localStorage como cache.
+        async function loadDataFromCloud() {
+            if (!supabase) {
+                // Sem Supabase configurado: usa apenas localStorage.
+                data = normalize(readLocal());
+                updateCloudStatus();
+                renderAll();
+                return;
+            }
+            try {
+                const { data: row } = await supabase
+                    .from('site_data')
+                    .select('payload')
+                    .eq('id', 1)
+                    .maybeSingle();
+                const payload = row && row.payload && typeof row.payload === 'object' ? row.payload : null;
+                const cloudHasData = payload && Array.isArray(payload.teams)
+                    ? payload.teams.length > 0 || (payload.games || []).length > 0 || (payload.players || []).length > 0 || (payload.news || []).length > 1
+                    : false;
+                if (cloudHasData) {
+                    data = normalize(payload);
+                } else {
+                    // Nuvem ainda vazia: reaproveita os dados que ja estavam salvos localmente.
+                    const local = readLocal();
+                    const localHasData = local && Array.isArray(local.teams)
+                        ? local.teams.length > 0 || (local.games || []).length > 0 || (local.players || []).length > 0 || (local.news || []).length > 1
+                        : false;
+                    data = normalize(localHasData ? local : getEmptyData());
+                    if (localHasData) localDataPendingUpload = true;
+                }
+                writeLocal(data);
+            } catch (e) {
+                console.error('Falha ao carregar dados da nuvem, usando cache local.', e);
+                data = normalize(readLocal());
+            }
+            updateCloudStatus();
+            renderAll();
+        }
+
+        function readLocal() {
+            const saved = localStorage.getItem(STORAGE_KEY);
+            if (saved) {
+                try { return JSON.parse(saved); } catch(e) {}
+            }
+            return null;
+        }
+
+        function writeLocal(d) {
+            try { localStorage.setItem(STORAGE_KEY + '_backup', localStorage.getItem(STORAGE_KEY) || ''); } catch(e) {}
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+        }
+
+        // Salva localmente sempre e, se configurado, envia para a nuvem.
+        let writeToken = null;
+        let writeTokenExp = 0;
+        let localDataPendingUpload = false;
+
+        function saveData() {
+            writeLocal(data);
+            if (supabase && writeToken) {
+                saveToCloud();
+            }
+        }
+
+        async function saveToCloud() {
+            try {
+                const res = await fetch(SUPABASE_FUNCTIONS_URL + '/save-data', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + writeToken
+                    },
+                    body: JSON.stringify({ payload: data })
+                });
+                if (res.status === 401) {
+                    showToast('Sessao expirada. Faca login novamente.');
+                    writeToken = null;
+                    return false;
+                }
+                return res.ok;
+            } catch (e) {
+                console.error('Falha ao salvar na nuvem.', e);
+                showToast('Nao foi possivel salvar na nuvem. Verifique sua conexao.');
+                return false;
+            }
+        }
+
+        let data = seedInauguralNews(getEmptyData());
+        let currentFilter = 'all';
+        let editingGameId = null;
+        const ADMIN_PASS = '3s'; // fallback local (somente se Supabase nao configurado)
+
+        // ===================== ADMIN =====================
+        function requireAdmin(callback) {
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+            pendingAdminAction = callback;
+            openModal('loginModal');
+            setTimeout(() => document.getElementById('loginPassword').focus(), 300);
+        }
+
+        let pendingAdminAction = null;
+
+        function doLogin() {
+            const pass = document.getElementById('loginPassword').value;
+
+            // Se Supabase configurado: verifica via Edge Function (senha fica no servidor).
+            if (supabase) {
+                verifyAdminPass(pass);
+            } else {
+                // Fallback local (somente enquanto nao ha Supabase configurado).
+                if (pass === ADMIN_PASS) { loginGranted(); }
+                else { loginFailed(); }
+            }
+        }
+
+        async function verifyAdminPass(pass) {
+            const btn = document.querySelector('#loginModal .btn-primary');
+            const errEl = document.getElementById('loginError');
+            const setErr = (msg) => { errEl.textContent = msg; errEl.style.display = 'block'; };
+            if (btn) btn.disabled = true;
+            try {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), 12000);
+                const res = await fetch(SUPABASE_FUNCTIONS_URL + '/admin-verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password: pass }),
+                    signal: controller.signal
+                });
+                clearTimeout(timer);
+                if (res.ok) {
+                    const dataRes = await res.json();
+                    writeToken = dataRes.token;
+                    writeTokenExp = dataRes.expiresAt || (Date.now() + 120000);
+                    loginGranted();
+                } else {
+                    let msg = 'Senha incorreta!';
+                    try { const b = await res.json(); if (b && b.error) msg = b.error; } catch(e) {}
+                    setErr(msg);
+                }
+            } catch (e) {
+                console.error('Falha ao verificar senha.', e);
+                setErr('Nao foi possivel conectar ao servidor de login. Publique as Edge Functions (Etapa 4) e confira a URL em index.html.');
+            } finally {
+                if (btn) btn.disabled = false;
+            }
+        }
+
+        function loginGranted() {
+            closeModal('loginModal');
+            if (localDataPendingUpload && supabase && writeToken) {
+                localDataPendingUpload = false;
+                saveToCloud().then(ok => {
+                    if (ok) {
+                        showToast('Seus dados locais foram enviados para a nuvem!');
+                        updateCloudStatus();
+                    }
+                });
+            }
+            if (pendingAdminAction) { pendingAdminAction(); pendingAdminAction = null; }
+        }
+
+        function loginFailed() {
+            document.getElementById('loginError').textContent = 'Senha incorreta!';
+            document.getElementById('loginError').style.display = 'block';
+            document.getElementById('loginPassword').value = '';
+            document.getElementById('loginPassword').focus();
+        }
+
+        // ===================== HELPERS =====================
+        function getTeamById(id) { return data.teams.find(t => t.id === id); }
+
+        function getInitials(name) {
+            return name.split(' ').filter(w => w.length > 2).map(w => w[0]).join('').substring(0, 2).toUpperCase() || name.substring(0, 2).toUpperCase();
+        }
+
+        function getForm(games, teamId) {
+            return games
+                .filter(g => g.status === 'finished' && (g.team1 === teamId || g.team2 === teamId))
+                .sort((a, b) => new Date(b.date) - new Date(a.date))
+                .slice(0, 5)
+                .map(g => {
+                    const won = (g.team1 === teamId && g.score1 > g.score2) || (g.team2 === teamId && g.score2 > g.score1);
+                    return won ? 'w' : 'l';
+                });
+        }
+
+        function calcStandingsForTeams(teamIds) {
+            const s = {};
+            teamIds.forEach(id => {
+                const t = getTeamById(id);
+                if (t) s[id] = { id: t.id, name: t.name, color: t.color, textColor: t.textColor, group: t.group, pts: 0, played: 0, wins: 0, losses: 0, setsWon: 0, setsLost: 0 };
+            });
+            data.games.filter(g => g.status === 'finished').forEach(g => {
+                if (!s[g.team1] || !s[g.team2]) return;
+                s[g.team1].played++; s[g.team2].played++;
+                s[g.team1].setsWon += g.score1; s[g.team1].setsLost += g.score2;
+                s[g.team2].setsWon += g.score2; s[g.team2].setsLost += g.score1;
+                if (g.score1 > g.score2) {
+                    s[g.team1].wins++; s[g.team2].losses++;
+                    s[g.team1].pts += 3;
+                    if (g.score2 === 2) s[g.team1].pts += 1;
+                } else {
+                    s[g.team2].wins++; s[g.team1].losses++;
+                    s[g.team2].pts += 3;
+                    if (g.score1 === 2) s[g.team2].pts += 1;
+                }
+            });
+            return Object.values(s).sort((a, b) => {
+                if (b.pts !== a.pts) return b.pts - a.pts;
+                const dsA = a.setsWon - a.setsLost, dsB = b.setsWon - b.setsLost;
+                if (dsB !== dsA) return dsB - dsA;
+                return b.setsWon - a.setsWon;
+            });
+        }
+
+        function showToast(msg) {
+            const t = document.getElementById('toast');
+            t.textContent = msg; t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        }
+
+        function updateCloudStatus() {
+            const el = document.getElementById('cloudStatus');
+            if (!el) return;
+            if (supabase) {
+                el.textContent = 'Sincronizado com a nuvem - seus dados nao se perdem.';
+            } else if (supabaseSdkMissing) {
+                el.textContent = 'Biblioteca de internet bloqueada. Usando dados locais.';
+            } else {
+                el.textContent = 'Dados salvos so neste navegador - configure o Supabase para sincronizar.';
+            }
+        }
+
+        function formatDate(dateStr) {
+            const d = new Date(dateStr + 'T12:00:00');
+            return d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
+        }
+
+        function formatDateShort(dateStr) {
+            const d = new Date(dateStr + 'T12:00:00');
+            return { day: d.getDate(), month: d.toLocaleDateString('pt-BR', { month: 'short' }).toUpperCase() };
+        }
+
+        // ===================== RENDER =====================
+        function renderAll() {
+            renderGames(); renderStandings(); renderTeams(); renderNews();
+            updateStats(); populateTeamSelects();
+        }
+
+        function updateStats() {
+            document.getElementById('statTeams').textContent = data.teams.length;
+            document.getElementById('statGroups').textContent = new Set(data.teams.map(t => t.group)).size;
+            document.getElementById('statPlayers').textContent = data.players.length;
+        }
+
+        function renderGames() {
+            const container = document.getElementById('gamesContainer');
+            let games = [...data.games];
+            if (currentFilter !== 'all') games = games.filter(g => g.status === currentFilter);
+            games.sort((a, b) => new Date(a.date + 'T' + (a.time||'00:00')) - new Date(b.date + 'T' + (b.time||'00:00')));
+
+            if (games.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">🏐</div><h3>Nenhum jogo</h3><p>Crie jogos para comecar o campeonato.</p></div>';
+                return;
+            }
+
+            container.innerHTML = games.map(g => {
+                const t1 = getTeamById(g.team1), t2 = getTeamById(g.team2);
+                if (!t1 || !t2) return '';
+
+                const hdr = g.status === 'live'
+                    ? '<span class="live-badge"><span class="live-dot"></span> AO VIVO</span>'
+                    : g.status === 'finished' ? 'FINALIZADO' : 'AGENDADO';
+
+                const scoreHtml = g.status === 'scheduled'
+                    ? `<div class="game-score" style="font-size:1rem;color:var(--text-light)">${g.time || 'A definir'}</div>`
+                    : `<div class="game-score">${g.score1} <span class="separator">x</span> ${g.score2}</div>`;
+
+                const actBtn = g.status === 'finished'
+                    ? `<button class="btn-score" onclick="openScoreModal(${g.id})">Editar Placar</button>`
+                    : `<button class="btn-score gold" onclick="openScoreModal(${g.id})">Placar</button>`;
+
+                return `
+                    <div class="game-card fade-in">
+                        <div class="game-card-header ${g.status}">
+                            <span>${g.round}</span>
+                            <span>${hdr}</span>
+                        </div>
+                        <div class="game-card-body">
+                            <div class="game-teams">
+                                <div class="game-team">
+                                    <div class="team-logo" style="background:${t1.color};color:${t1.textColor}">${getInitials(t1.name)}</div>
+                                    <div class="team-name">${t1.name}</div>
+                                    <div class="team-class">Grupo ${t1.group}</div>
+                                </div>
+                                ${scoreHtml}
+                                <div class="game-team">
+                                    <div class="team-logo" style="background:${t2.color};color:${t2.textColor}">${getInitials(t2.name)}</div>
+                                    <div class="team-name">${t2.name}</div>
+                                    <div class="team-class">Grupo ${t2.group}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="game-card-actions">
+                            ${actBtn}
+                            <button class="btn-score red" onclick="deleteGame(${g.id})">Excluir</button>
+                        </div>
+                        <div class="game-card-footer">
+                            <span>${formatDate(g.date)}</span>
+                            <span>${g.location}</span>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function renderStandings() {
+            const container = document.getElementById('standingsContainer');
+            const groups = ['A', 'B', 'C'];
+            let html = '';
+
+            groups.forEach(grp => {
+                const teamIds = data.teams.filter(t => t.group === grp).map(t => t.id);
+                const standings = calcStandingsForTeams(teamIds);
+
+                html += `<div class="group-header"><span class="grp-icon">${grp}</span> Grupo ${grp}</div>`;
+                html += `<div class="standings-wrapper">`;
+                html += `<table class="standings-table"><thead><tr>
+                    <th>#</th><th>Equipe</th><th>P</th><th>J</th>
+                    <th>V</th><th>D</th><th>S+</th><th>S-</th><th>DS</th><th>Forma</th>
+                </tr></thead><tbody>`;
+
+                if (standings.length === 0) {
+                    html += '<tr><td colspan="10" style="text-align:center;padding:1.5rem;color:var(--text-light)">Nenhuma equipe neste grupo.</td></tr>';
+                } else {
+                    standings.forEach((s, i) => {
+                        const form = getForm(data.games, s.id);
+                        const posClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
+                        const formHtml = form.length > 0
+                            ? `<div class="form-indicator">${form.map(f => `<span class="form-dot ${f}"></span>`).join('')}</div>` : '-';
+                        html += `<tr>
+                            <td class="position ${posClass}">${i + 1}</td>
+                            <td><div class="team-cell"><div class="mini-logo" style="background:${s.color};color:${s.textColor}">${getInitials(s.name)}</div><span><strong>${s.name}</strong></span></div></td>
+                            <td class="pts">${s.pts}</td><td>${s.played}</td><td>${s.wins}</td><td>${s.losses}</td>
+                            <td>${s.setsWon}</td><td>${s.setsLost}</td>
+                            <td>${s.setsWon - s.setsLost > 0 ? '+' : ''}${s.setsWon - s.setsLost}</td>
+                            <td>${formHtml}</td>
+                        </tr>`;
+                    });
+                }
+
+                html += '</tbody></table></div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderTeams() {
+            const container = document.getElementById('teamsContainer');
+            if (data.teams.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">👥</div><h3>Nenhuma equipe</h3><p>Adicione 9 equipes (3 por grupo).</p></div>';
+                return;
+            }
+
+            const groups = ['A', 'B', 'C'];
+            let html = '';
+
+            groups.forEach(grp => {
+                const groupTeams = data.teams.filter(t => t.group === grp);
+                if (groupTeams.length === 0) return;
+
+                html += `<div class="group-header"><span class="grp-icon">${grp}</span> Grupo ${grp}</div>`;
+                html += '<div class="teams-grid">';
+
+                groupTeams.forEach(t => {
+                    const games = data.games.filter(g => (g.team1 === t.id || g.team2 === t.id) && g.status === 'finished');
+                    const wins = games.filter(g => (g.team1 === t.id && g.score1 > g.score2) || (g.team2 === t.id && g.score2 > g.score1)).length;
+                    const playerCount = data.players.filter(p => p.team === t.id).length;
+                    const captain = t.captain ? data.players.find(p => p.id === t.captain) : null;
+                    html += `
+                        <div class="team-card fade-in" onclick="showTeamPlayers(${t.id})">
+                            <div class="big-logo" style="background:${t.color};color:${t.textColor}">${getInitials(t.name)}</div>
+                            <h3>${t.name}</h3>
+                            <div class="tags"><span class="team-class-tag">${t.class}</span><span class="group-badge">Grupo ${t.group}</span></div>
+                            ${captain ? `<p style="font-size:0.78rem;color:var(--accent);font-weight:600;margin-bottom:0.75rem;">Capitao: ${captain.name}</p>` : ''}
+                            <div class="team-stats">
+                                <div class="team-stat"><div class="val">${wins}</div><div class="lbl">Vitorias</div></div>
+                                <div class="team-stat"><div class="val">${games.length - wins}</div><div class="lbl">Derrotas</div></div>
+                                <div class="team-stat"><div class="val">${playerCount}</div><div class="lbl">Jogadores</div></div>
+                            </div>
+                            <button class="btn btn-sm btn-secondary" style="margin-top:0.75rem" onclick="event.stopPropagation();deleteTeam(${t.id})">Excluir</button>
+                        </div>`;
+                });
+
+                html += '</div>';
+            });
+
+            container.innerHTML = html;
+        }
+
+        let selectedTeamId = null;
+
+        function showTeamPlayers(teamId) {
+            selectedTeamId = teamId;
+            const team = getTeamById(teamId);
+            if (!team) return;
+            const players = data.players.filter(p => p.team === teamId);
+            document.getElementById('teamPlayersTitle').textContent = `Jogadores - ${team.name}`;
+
+            const captainSelect = document.getElementById('teamCaptain');
+            captainSelect.innerHTML = '<option value="">Sem capitão</option>' + players.map(p =>
+                `<option value="${p.id}" ${p.id === team.captain ? 'selected' : ''}>${p.name}</option>`
+            ).join('');
+
+            if (players.length === 0) {
+                document.getElementById('teamPlayersList').innerHTML = '<div class="empty-state"><div class="icon">⭐</div><h3>Nenhum jogador</h3><p>Adicione jogadores para esta equipe.</p></div>';
+            } else {
+                document.getElementById('teamPlayersList').innerHTML = `<div class="players-grid compact">${players.map(p => `
+                    <div class="player-card compact fade-in" ${p.id === team.captain ? 'style="border-color:var(--gold);"' : ''}>
+                        <div class="player-avatar" style="background:${team.color};color:${team.textColor}">${getInitials(p.name)}</div>
+                        <div class="player-info">
+                            <h4>${p.name}${p.id === team.captain ? ' <span style="color:var(--gold);font-size:0.7rem;">👑</span>' : ''}</h4>
+                        </div>
+                        <button class="btn-x" onclick="deletePlayerFromTeam(${p.id})" title="Excluir">&times;</button>
+                    </div>`).join('')}</div>`;
+            }
+            openModal('teamPlayersModal');
+        }
+
+        function addPlayerToTeam() {
+            closeModal('teamPlayersModal');
+            document.getElementById('playerTeam').value = selectedTeamId;
+            openModal('playerModal');
+        }
+
+        function setCaptain(playerId) {
+            requireAdmin(() => {
+                const team = getTeamById(selectedTeamId);
+                if (!team) return;
+                team.captain = playerId ? parseInt(playerId) : null;
+                saveData();
+                showToast('Capitao atualizado!');
+                renderAll();
+            });
+        }
+
+        function deletePlayerFromTeam(id) {
+            requireAdmin(() => {
+                if (!confirm('Excluir este jogador?')) return;
+                const team = getTeamById(selectedTeamId);
+                if (team && team.captain === id) team.captain = null;
+                data.players = data.players.filter(p => p.id !== id);
+                saveData();
+                showTeamPlayers(selectedTeamId);
+                renderAll();
+                showToast('Jogador excluido.');
+            });
+        }
+
+        function renderPlayers() {
+            const container = document.getElementById('playersContainer');
+            const sorted = [...data.players].sort((a, b) => b.points - a.points);
+            if (sorted.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">⭐</div><h3>Nenhum jogador</h3><p>Adicione jogadores com seus nomes e numeros.</p></div>';
+                return;
+            }
+            container.innerHTML = sorted.map(p => {
+                const team = getTeamById(p.team);
+                if (!team) return '';
+                return `
+                    <div class="player-card fade-in">
+                        <div class="player-avatar" style="background:${team.color};color:${team.textColor}">${getInitials(p.name)}</div>
+                        <div class="player-info">
+                            <h4>${p.name}</h4>
+                            <div class="player-team">${team.name} &bull; Grupo ${team.group}</div>
+                        </div>
+                        <button class="btn-x" onclick="deletePlayer(${p.id})" title="Excluir">&times;</button>
+                    </div>`;
+            }).join('');
+        }
+
+        function renderNews() {
+            const container = document.getElementById('newsContainer');
+            const sorted = [...data.news].sort((a, b) => new Date(b.date) - new Date(a.date));
+            if (sorted.length === 0) {
+                container.innerHTML = '<div class="empty-state"><div class="icon">📰</div><h3>Nenhuma noticia</h3><p>Publique a primeira noticia do campeonato!</p></div>';
+                return;
+            }
+            container.innerHTML = sorted.map(n => {
+                const fd = formatDateShort(n.date);
+                return `
+                    <div class="news-item fade-in">
+                        <div class="news-date-box"><div class="day">${fd.day}</div><div class="month">${fd.month}</div></div>
+                        <div class="news-content">
+                            <h3>${n.title}</h3>
+                            <p>${n.body}</p>
+                            <span class="news-tag">${n.category}</span>
+                            <button class="btn btn-sm btn-secondary" style="margin-top:6px" onclick="deleteNews(${n.id})">Excluir</button>
+                        </div>
+                    </div>`;
+            }).join('');
+        }
+
+        function populateTeamSelects() {
+            const opts = data.teams.map(t => `<option value="${t.id}">${t.name} (Grupo ${t.group})</option>`).join('');
+            document.getElementById('gameTeam1').innerHTML = opts;
+            document.getElementById('gameTeam2').innerHTML = opts;
+            document.getElementById('playerTeam').innerHTML = opts;
+        }
+
+        // ===================== ACTIONS =====================
+        function filterGames(filter, btn) {
+            currentFilter = filter;
+            document.querySelectorAll('#jogos .filter-bar .tab-btn').forEach(b => b.classList.remove('active'));
+            if (btn) btn.classList.add('active');
+            renderGames();
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+            if (id === 'gameModal') document.getElementById('gameDate').valueAsDate = new Date();
+            if (id === 'newsModal') document.getElementById('newsDate').valueAsDate = new Date();
+        }
+
+        function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+        document.querySelectorAll('.modal-overlay').forEach(o => {
+            o.addEventListener('click', function(e) { if (e.target === this) this.classList.remove('active'); });
+        });
+
+        function saveGame() {
+            requireAdmin(() => {
+                const team1 = parseInt(document.getElementById('gameTeam1').value);
+                const team2 = parseInt(document.getElementById('gameTeam2').value);
+                const date = document.getElementById('gameDate').value;
+                const time = document.getElementById('gameTime').value;
+                const location = document.getElementById('gameLocation').value || 'Quadra da escola';
+                const round = document.getElementById('gameRound').value;
+                if (!date) { showToast('Informe a data do jogo!'); return; }
+                if (team1 === team2) { showToast('Selecione equipes diferentes!'); return; }
+                data.games.push({ id: data.nextId++, team1, team2, date, time, location, status: 'scheduled', round, score1: 0, score2: 0 });
+                saveData(); closeModal('gameModal'); renderAll();
+                showToast('Jogo criado!');
+            });
+        }
+
+        function deleteGame(id) {
+            requireAdmin(() => {
+                if (!confirm('Excluir este jogo?')) return;
+                data.games = data.games.filter(g => g.id !== id);
+                saveData(); renderAll(); showToast('Jogo excluido.');
+            });
+        }
+
+        function setGameLive(id) {
+            const game = data.games.find(g => g.id === id);
+            if (game) { game.status = 'live'; saveData(); renderAll(); showToast('Jogo AO VIVO!'); }
+        }
+
+        function openScoreModal(gameId) {
+            requireAdmin(() => {
+                editingGameId = gameId;
+                const game = data.games.find(g => g.id === gameId);
+                if (!game) return;
+                const t1 = getTeamById(game.team1), t2 = getTeamById(game.team2);
+                document.getElementById('scoreGameInfo').innerHTML = `
+                    <div style="display:flex;align-items:center;justify-content:center;gap:14px;">
+                        <div>
+                            <div class="team-logo" style="background:${t1.color};color:${t1.textColor};margin:0 auto 4px;width:52px;height:52px;font-size:1.1rem;">${getInitials(t1.name)}</div>
+                            <strong style="font-size:0.85rem">${t1.name}</strong>
+                        </div>
+                        <span style="font-size:1.2rem;font-weight:800;color:var(--text-light)">VS</span>
+                        <div>
+                            <div class="team-logo" style="background:${t2.color};color:${t2.textColor};margin:0 auto 4px;width:52px;height:52px;font-size:1.1rem;">${getInitials(t2.name)}</div>
+                            <strong style="font-size:0.85rem">${t2.name}</strong>
+                        </div>
+                    </div>`;
+                document.getElementById('scoreLabel1').textContent = `Sets - ${t1.name}`;
+                document.getElementById('scoreLabel2').textContent = `Sets - ${t2.name}`;
+                document.getElementById('scoreInput1').value = game.score1;
+                document.getElementById('scoreInput2').value = game.score2;
+                openModal('scoreModal');
+            });
+        }
+
+        function saveScore() {
+            const game = data.games.find(g => g.id === editingGameId);
+            if (!game) return;
+            const s1 = parseInt(document.getElementById('scoreInput1').value) || 0;
+            const s2 = parseInt(document.getElementById('scoreInput2').value) || 0;
+            if (s1 < 0 || s2 < 0) { showToast('Placar invalido!'); return; }
+            if (s1 === 0 && s2 === 0) { showToast('Coloque pelo menos um set!'); return; }
+            game.score1 = s1; game.score2 = s2;
+            if (s1 !== s2) game.status = 'finished';
+            saveData(); closeModal('scoreModal'); renderAll();
+            showToast('Placar registrado!');
+        }
+
+        function saveTeam() {
+            requireAdmin(() => {
+                const name = document.getElementById('teamName').value.trim();
+                const cls = document.getElementById('teamClass').value.trim();
+                const group = document.getElementById('teamGroup').value;
+                const color = document.getElementById('teamColor').value;
+                const textColor = document.getElementById('teamTextColor').value;
+                if (!name) { showToast('Informe o nome da equipe!'); return; }
+                const groupCount = data.teams.filter(t => t.group === group).length;
+                if (groupCount >= 3) { showToast(`O Grupo ${group} ja tem 3 equipes!`); return; }
+                data.teams.push({ id: data.nextId++, name, class: cls || 'Sem turma', group, color, textColor });
+                saveData(); closeModal('teamModal'); renderAll();
+                showToast(`Equipe no Grupo ${group}!`);
+            });
+        }
+
+        function deleteTeam(id) {
+            requireAdmin(() => {
+                if (!confirm('Excluir esta equipe e todos os seus jogos/jogadores?')) return;
+                data.teams = data.teams.filter(t => t.id !== id);
+                data.games = data.games.filter(g => g.team1 !== id && g.team2 !== id);
+                data.players = data.players.filter(p => p.team !== id);
+                saveData(); renderAll(); showToast('Equipe excluida.');
+            });
+        }
+
+        function savePlayer() {
+            requireAdmin(() => {
+                const name = document.getElementById('playerName').value.trim();
+                const team = parseInt(document.getElementById('playerTeam').value);
+                if (!name) { showToast('Informe o nome do jogador!'); return; }
+                data.players.push({ id: data.nextId++, name, team, number: 0, position: '', points: 0 });
+                saveData(); closeModal('playerModal'); renderAll();
+                if (selectedTeamId) showTeamPlayers(selectedTeamId);
+                showToast('Jogador adicionado!');
+            });
+        }
+
+        function deletePlayer(id) {
+            requireAdmin(() => {
+                if (!confirm('Excluir este jogador?')) return;
+                data.players = data.players.filter(p => p.id !== id);
+                saveData(); renderAll(); showToast('Jogador excluido.');
+            });
+        }
+
+        function saveNews() {
+            requireAdmin(() => {
+                const title = document.getElementById('newsTitle').value.trim();
+                const body = document.getElementById('newsBody').value.trim();
+                const date = document.getElementById('newsDate').value;
+                const category = document.getElementById('newsCategory').value;
+                if (!title || !body) { showToast('Preencha titulo e conteudo!'); return; }
+                data.news.push({ id: data.nextId++, title, body, date: date || new Date().toISOString().split('T')[0], category });
+                saveData(); closeModal('newsModal'); renderAll();
+                showToast('Noticia publicada!');
+            });
+        }
+
+        function deleteNews(id) {
+            requireAdmin(() => {
+                if (!confirm('Excluir esta noticia?')) return;
+                data.news = data.news.filter(n => n.id !== id);
+                saveData(); renderAll(); showToast('Noticia excluida.');
+            });
+        }
+
+        function resetAllData() {
+            if (!confirm('Apagar todos os dados e recomecar do zero?')) return;
+            requireAdmin(() => {
+                data = seedInauguralNews(getEmptyData());
+                saveData();
+                renderAll();
+                showToast('Dados resetados.');
+            });
+        }
+
+        // ===================== NAV =====================
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('navLinks').classList.remove('open');
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            if (event && event.target) event.target.classList.add('active');
+        }
+
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('open'); }
+
+        window.addEventListener('scroll', () => {
+            const sections = ['hero','jogos','classificacao','equipes','noticias'];
+            let current = 'hero';
+            sections.forEach(id => {
+                const el = document.getElementById(id);
+                if (el && window.scrollY >= el.offsetTop - 150) current = id;
+            });
+            document.querySelectorAll('.nav-links a').forEach(a => {
+                a.classList.remove('active');
+                if (a.getAttribute('onclick') && a.getAttribute('onclick').includes(current)) a.classList.add('active');
+            });
+        });
+
+        loadDataFromCloud();
+    </script>
+</body>
+</html>
